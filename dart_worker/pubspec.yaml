@@ -1,0 +1,10 @@
+name: fscan_dart_worker
+description: Dart semantic analysis worker for fscan Flutter dead code scanner
+publish_to: none
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  analyzer: ^6.4.0
+  args: ^2.4.0

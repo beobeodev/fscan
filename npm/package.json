@@ -1,0 +1,33 @@
+{
+  "name": "fscan",
+  "version": "0.1.0",
+  "description": "Blazing-fast dead code scanner for Flutter & Dart projects",
+  "bin": {
+    "fscan": "bin/fscan"
+  },
+  "scripts": {
+    "postinstall": "node install.js"
+  },
+  "keywords": [
+    "flutter",
+    "dart",
+    "dead-code",
+    "unused-code",
+    "static-analysis",
+    "lint",
+    "scanner"
+  ],
+  "author": "beobeodev",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/beobeodev/fscan"
+  },
+  "homepage": "https://github.com/beobeodev/fscan",
+  "bugs": {
+    "url": "https://github.com/beobeodev/fscan/issues"
+  },
+  "engines": {
+    "node": ">=14"
+  }
+}

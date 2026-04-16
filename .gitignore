@@ -1,0 +1,26 @@
+# Build artifacts
+build/
+*.exe
+
+# Go
+*.test
+coverage.out
+
+# Dart
+dart_worker/.dart_tool/
+dart_worker/.pub-cache/
+dart_worker/pubspec.lock
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# macOS
+.DS_Store
+
+testdata/
+plans/
+docs/
+.claude/
+*.exe
