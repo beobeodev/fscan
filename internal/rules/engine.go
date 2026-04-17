@@ -33,6 +33,7 @@ func NewEngine(cfg *config.ScanConfig) *Engine {
 		&MaybeUnusedPublicAPIRule{},
 		&MaybeUnusedWidgetRule{},
 		&MaybeUnusedMethodRule{},
+		&UnusedRouteRule{},
 	}
 
 	// Filter to enabled rules if specified

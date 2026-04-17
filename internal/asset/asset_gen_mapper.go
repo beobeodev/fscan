@@ -63,7 +63,11 @@ func (m *AssetGenMapper) Build() map[string][]string {
 	return result
 }
 
-// findGenFiles returns paths of generated Dart files that likely contain asset mappings.
+// findGenFiles returns paths of Dart files that likely contain asset mappings.
+// Recognises common generator outputs by filename (flutter_gen, flutter_asset_generator,
+// spider) AND any file whose first lines contain a "GENERATED CODE" marker — covers
+// custom output filenames. Also includes any .dart file containing an "assets/" or
+// "fonts/" string literal, so hand-written asset constant files are picked up too.
 func (m *AssetGenMapper) findGenFiles() []string {
 	libDir := filepath.Join(m.projectRoot, "lib")
 	var genFiles []string
@@ -72,15 +76,43 @@ func (m *AssetGenMapper) findGenFiles() []string {
 		if err != nil || d.IsDir() {
 			return nil
 		}
-		base := d.Name()
-		if strings.HasSuffix(base, ".gen.dart") ||
-			strings.HasSuffix(base, ".assets.dart") ||
-			base == "r.dart" || base == "assets.dart" {
+		if !strings.HasSuffix(d.Name(), ".dart") {
+			return nil
+		}
+		if isAssetMappingFile(path, d.Name()) {
 			genFiles = append(genFiles, path)
 		}
 		return nil
 	})
 	return genFiles
+}
+
+// isAssetMappingFile returns true if the file is a known generated asset mapping file,
+// has a "GENERATED CODE" marker in its header, or contains asset path string literals.
+func isAssetMappingFile(absPath, base string) bool {
+	if strings.HasSuffix(base, ".gen.dart") ||
+		strings.HasSuffix(base, ".assets.dart") ||
+		base == "r.dart" || base == "R.dart" ||
+		base == "assets.dart" || base == "Assets.dart" {
+		return true
+	}
+	f, err := os.Open(absPath)
+	if err != nil {
+		return false
+	}
+	defer f.Close()
+	scanner := bufio.NewScanner(f)
+	scanner.Buffer(make([]byte, 64*1024), 1024*1024)
+	for i := 0; scanner.Scan() && i < 200; i++ {
+		line := scanner.Text()
+		if i < 10 && strings.Contains(line, "GENERATED CODE") {
+			return true
+		}
+		if reAssetStringLiteral.MatchString(line) {
+			return true
+		}
+	}
+	return false
 }
 
 // extractAssetsFromGenFile extracts asset paths from a generated Dart file.

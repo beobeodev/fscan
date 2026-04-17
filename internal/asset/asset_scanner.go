@@ -138,16 +138,39 @@ func collectLibDartFiles(projectRoot string) []string {
 	return files
 }
 
-// isGeneratedDartFile returns true for build_runner generated files.
-// These are handled by the AssetGenMapper, not the string scanner.
+// isGeneratedDartFile returns true for build_runner/codegen outputs.
+// These are handled by the AssetGenMapper (with liveness check), not the string scanner.
+// Detects by known filenames/suffixes and by "GENERATED CODE" header marker —
+// the latter covers flutter_asset_generator with custom output names (e.g. resource.dart).
 func isGeneratedDartFile(path string) bool {
 	base := filepath.Base(path)
-	return strings.HasSuffix(base, ".g.dart") ||
+	if strings.HasSuffix(base, ".g.dart") ||
 		strings.HasSuffix(base, ".gen.dart") ||
 		strings.HasSuffix(base, ".freezed.dart") ||
 		strings.HasSuffix(base, ".gr.dart") ||
 		strings.HasSuffix(base, ".mocks.dart") ||
-		base == "r.dart" || base == "assets.dart"
+		base == "r.dart" || base == "R.dart" ||
+		base == "assets.dart" || base == "Assets.dart" ||
+		base == "resource.dart" {
+		return true
+	}
+	return hasGeneratedHeader(path)
+}
+
+// hasGeneratedHeader checks the first ~10 lines for a "GENERATED CODE" marker.
+func hasGeneratedHeader(path string) bool {
+	f, err := os.Open(path)
+	if err != nil {
+		return false
+	}
+	defer f.Close()
+	scanner := bufio.NewScanner(f)
+	for i := 0; i < 10 && scanner.Scan(); i++ {
+		if strings.Contains(scanner.Text(), "GENERATED CODE") {
+			return true
+		}
+	}
+	return false
 }
 
 // scanFieldReferences checks user .dart files for gen field accessor patterns.

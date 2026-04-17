@@ -197,7 +197,7 @@ func ScanSameFileUsage(files []FileContent, symbols []RawSymbol) map[string]bool
 				// Private symbols: 1 match = used
 				// Public widgets: 2 matches = used (skip constructor def)
 				threshold := 1
-				if !s.IsPrivate {
+				if s.IsWidget && !s.IsPrivate {
 					threshold = 2
 				}
 
