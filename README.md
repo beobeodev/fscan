@@ -31,6 +31,7 @@ Flutter projects accumulate dead code over time — orphaned screens, unused uti
 | Unused private symbols | Yes | Impossible at scale | Partial |
 | Unused public APIs | Yes (warnings) | Impossible at scale | No |
 | Unused widgets | Yes | Manual | No |
+| Unused routes (auto_route/go_router/Navigator) | Yes | Manual | No |
 | flutter_gen support | Yes | N/A | N/A |
 | Speed (500+ files) | ~2 seconds | Hours | Minutes |
 | Requires Dart SDK | No | N/A | Yes |
@@ -105,6 +106,8 @@ Total: 11 issues (6 errors, 5 warnings)
 |------|-------------|
 | `maybe-unused-public-api` | Public classes and functions with no references in the project |
 | `maybe-unused-widget` | Widget subclasses never instantiated or route-registered |
+| `maybe-unused-method` | Public methods with no cross-file or same-file callers (owner-class-aware) |
+| `unused-route` | Routes declared in auto_route / go_router / Navigator but never navigated to |
 
 > Warnings are for symbols that *could* be part of a public API or used via dynamic routing. Review them — don't blindly delete.
 
@@ -321,7 +324,7 @@ fscan/
 │   ├── scanner/                  # Symbol extraction, cross-file reference counting
 │   ├── asset/                    # pubspec.yaml parsing, asset scanning, flutter_gen mapping
 │   ├── dart/                     # Optional Dart semantic worker (subprocess protocol)
-│   ├── rules/                    # Rule engine + 6 detection rules
+│   ├── rules/                    # Rule engine + 8 detection rules
 │   └── report/                   # Text, JSON, SARIF reporters
 ├── dart_worker/                  # Dart subprocess (package:analyzer)
 ├── testdata/sample_app/          # Integration test fixtures
