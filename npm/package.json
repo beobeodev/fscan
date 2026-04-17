@@ -1,5 +1,5 @@
 {
-  "name": "fscan",
+  "name": "@beobeodev/fscan",
   "version": "0.1.0",
   "description": "Blazing-fast dead code scanner for Flutter & Dart projects",
   "bin": {

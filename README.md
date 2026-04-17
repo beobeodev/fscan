@@ -3,6 +3,7 @@
   <img src="https://img.shields.io/badge/Flutter-Compatible-02569B?style=for-the-badge&logo=flutter&logoColor=white" alt="Flutter"/>
   <img src="https://img.shields.io/badge/SARIF-2.1.0-4B275F?style=for-the-badge" alt="SARIF 2.1.0"/>
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License"/>
+  <img src="https://img.shields.io/npm/v/@beobeodev/fscan?style=for-the-badge&logo=npm&logoColor=white" alt="npm"/>
 </p>
 
 <h1 align="center">fscan</h1>
@@ -45,7 +46,7 @@ Flutter projects accumulate dead code over time — orphaned screens, unused uti
 brew install beobeodev/tap/fscan
 
 # npm (any platform with Node.js)
-npm install -g fscan
+npm install -g @beobeodev/fscan
 
 # Go
 go install github.com/beobeodev/fscan@latest
